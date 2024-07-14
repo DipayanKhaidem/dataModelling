@@ -1,0 +1,31 @@
+update employee set dnumber="D005",man_ssn="AB24CD02" where ssn="AB24CD07";
+update employee set dnumber="D004",man_ssn="AB24CD03" where ssn="AB24CD08";
+ select * from employee;
+
+update departments set man_ssn="AB24CD01" where dnumber="D001";
+update departments set man_ssn="AB24CD03" where dnumber="D002";
+update departments set man_ssn="AB24CD05" where dnumber="D003";
+update departments set man_ssn="AB24CD02" where dnumber="D004";
+update departments set man_ssn="AB24CD06" where dnumber="D005";
+select * from departments;
+
+insert into projects(pnumber,pname,location,dnumber)values("P001","Welfare","Bengaluru","D001"),("P002","Health","Mysore","D002"),("P003","Spirit","Delhi","D004"),("P004","Mind","Mumbai","D003"),("P005","Soul","Ghy","D005");
+select * from projects;
+
+insert into working_hours(ssn,pnumber,hours)values("AB24CD01","P001",5),("AB24CD02","P002",6),("AB24CD05","P002",4),("AB24CD03","P003",3),("AB24CD05","P001",2),("AB24CD05","P003",3);
+select *from working_hours;
+
+insert into dependents(name,sex,birthdate,relationship,ssn)values("Ramesh","m","1955-08-04","Father","AB24CD01"),("Smitha","f","1960-06-05","Mother","AB24CD01"),("Ananya","f","1991-05-04","Sister","AB24CD03"),("Maria","f","1950-04-06","Mother","AB24CD04");
+select * from dependents;
+
+--List the fname,lname,dept_name of the employees who draws a salary greater than the average salary of employees working for finance department
+select e.fname,e.salary,d.dname from employee e join departments d on e.dnumber=d.dnumber where e.salary>(select avg(e2.salary) from employee e2 join departments d2 on e2.dnumber=d2.dnumber where d2.dname="Finance");
+
+--List the name and department of the employee who is currently working on more than two project controlled by R&D department.
+select e.fname,d.dname from employee e join working_hours w on e.ssn=w.ssn join projects p on w.pnumber=p.pnumber join departments d on e.dnumber=d.dnumber where p.dnumber=(select dnumber from departments where dname="RnD") group by e.fname,d.dname having count(w.pnumber)>=2;
+
+--List all the ongoing projects controlled by all the departments.
+select p.pname,d.dname from projects p join departments d on p.dnumber=d.dnumber;
+
+--Give the details of the supervisor who is supervising more than 3 employees who have completed at least one project.
+select e.ssn,e.fname,e.lname,e.salary,e.birth_date,e.address,e.gender,e.dnumber,e.man_ssn from  employee e where e.ssn in(select e.man_ssn from employee e where e.ssn in(select w.ssn from working_hours w group by w.ssn having count(w.pnumber)>=1)group by e.man_ssn having count(e.ssn)>2);
