@@ -1,7 +1,9 @@
 create table departments(dnumber varchar(10),dname varchar(10),startdate date,primary key(dnumber));
 create table employee(ssn varchar(10),fname varchar(15),lname varchar(15),address varchar(15),salary int,gender char,birth_date date,primary key(ssn));
 create table department_location(dnumber varchar(10),location varchar(15),primary key(dnumber));
-
+create table projects(pnumber varchar(10),pname varchar(10),location varchar(10),dnumber varchar(10),primary key(pnumber),foreign key(dnumber) references departments(dnumber));
+create table working_hours(ssn varchar(10),pnumber varchar(10),hours int,primary key(ssn,pnumber),foreign key(ssn) references employee(ssn),foreign key(pnumber) references projects(pnumber));
+create table dependents(name VARCHAR(10),sex char,birthdate date,relationship varchar(10),ssn varchar(10),primary key(ssn,name),foreign key(ssn) references employee(ssn));
 
 
 ALTER TABLE employee 
