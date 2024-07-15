@@ -1,3 +1,25 @@
+create table departments(dnumber varchar(10),dname varchar(10),startdate date,primary key(dnumber));
+create table employee(ssn varchar(10),fname varchar(15),lname varchar(15),address varchar(15),salary int,gender char,birth_date date,primary key(ssn));
+create table department_location(dnumber varchar(10),location varchar(15),primary key(dnumber));
+
+
+
+ALTER TABLE employee 
+ADD COLUMN dnumber VARCHAR(10),
+ADD COLUMN man_ssn VARCHAR(10),
+ADD CONSTRAINT  FOREIGN KEY (dnumber) REFERENCES departments(dnumber),
+ADD CONSTRAINT  FOREIGN KEY (man_ssn) REFERENCES employee(ssn);
+
+alter table departments add column man_ssn varchar(10);
+
+desc departments;
+desc employee;
+desc department_location;
+
+insert into employee(ssn,fname,lname,address,salary,gender,birth_date)values("AB24CD01","Manu","Sk","Hoogli",25000,"f","1985-01-02"),("AB24CD02","Sushil","Kumar","Bidar",20000,"m","1983-03-05"),("AB24CD03","Aliya","Z","Hosur",30000,"f","1980-05-04"),("AB24CD04","Arun","Kumar","Bengaluru",26000,"m","1984-07-06"),("AB24CD05","Ravi","Shankar","Mumbai",28000,"m","1986-08-02"),("AB24CD06","Anil","Sharma","Delhi",27000,"m","1980-09-07"),("AB24CD07","Mary","F","Assam",30000,"f","1983-06-08"),("AB24CD08","Neha","Paul","Wb",24000,"f","1985-04-06");
+select *from employee;
+
+
 update employee set dnumber="D005",man_ssn="AB24CD02" where ssn="AB24CD07";
 update employee set dnumber="D004",man_ssn="AB24CD03" where ssn="AB24CD08";
  select * from employee;
