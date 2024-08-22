@@ -1,0 +1,120 @@
+CREATE TABLE Vendor (
+    TIN_number VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(100),
+    Address VARCHAR(255),
+    Contact_detail VARCHAR(15)
+);
+CREATE TABLE Panel (
+    pv_module VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(100),
+    Warranty INT,
+    Capacity INT
+);
+INSERT INTO Vendor (TIN_number, Name, Address, Contact_detail) VALUES
+('TIN001', 'SunDoor1', '123 Street, Bangalore', '1234567890'),
+('TIN002', 'Eco Solar', 'abc Street, Mumbai', '2345678901'),
+('TIN003', 'SunDoor2', 'Delhi', '3456789012'),
+('TIN004', 'Sunpower1', 'Pune', '4567890123'),
+('TIN005', 'SolarTech', 'Bangalore', '5678901234'),
+('TIN006', 'GreenSolar', 'Hyderabad', '6789012345'),
+('TIN007', 'Sunview solar', 'Delhi', '7890123456'),
+('TIN008', 'ABC solar', 'Mumbai', '8901234567');
+
+
+select * from Vendor;
+
+INSERT INTO Panel (pv_module, Name, Warranty, Capacity) VALUES
+('PV001', 'Monocrystalline', 15, 350),
+('PV002', 'Polycrystalline', 25, 400);
+
+select * from Panel;
+
+CREATE TABLE user(
+    home_office_no VARCHAR(50) PRIMARY KEY,
+    address VARCHAR(255),
+    location_type VARCHAR(100)
+);
+INSERT INTO user(home_office_no, address, location_type) VALUES
+('H_001', 'Bangalore', 'Domestic'),
+('H_002', 'Mumbai', 'Commercial'),
+('O_001', 'Bangalore', 'Commercial'),
+('O_002', 'Hyderabad', 'Commercial'),
+('H_003', 'Delhi', 'Domestic'),
+('H_004', 'Pune', 'Domestic'),
+('O_003', 'Delhi', 'Commercial'),
+('O_004', 'Pune', 'Commercial'),
+('O_005', 'Bangalore', 'Domestic');
+
+select * from user;
+
+CREATE TABLE install (
+    date DATE,
+    type VARCHAR(50),
+    charges INT,
+    pv_module VARCHAR(10),
+    home_office_no VARCHAR(50),
+    tin_no VARCHAR(10),
+    PRIMARY KEY (date, pv_module, home_office_no),
+    FOREIGN KEY (pv_module) REFERENCES Panel(pv_module),
+    FOREIGN KEY (home_office_no) REFERENCES user(home_office_no),
+    FOREIGN KEY (tin_no) REFERENCES Vendor(TIN_number)
+);
+INSERT INTO install (date, type, charges, pv_module, home_office_no, tin_no) VALUES
+('2023-01-15', 'Domestic', 40000, 'PV001', 'H_001', 'TIN001'),
+('2023-02-20', 'Commercial', 60000, 'PV002', 'H_002', 'TIN002'),
+('2023-03-30', 'Domestic', 40000, 'PV001', 'O_001', 'TIN001'),
+('2023-04-10', 'Commercial', 60000, 'PV002', 'O_002', 'TIN006'),
+('2023-05-15', 'Domestic', 40000, 'PV001', 'H_003', 'TIN003'),
+('2023-06-20', 'Commercial', 60000, 'PV002', 'H_004', 'TIN004'),
+('2023-07-25', 'Domestic', 40000, 'PV001', 'H_004', 'TIN004'),
+('2023-08-30', 'Commercial', 60000, 'PV002', 'O_003', 'TIN004'),
+('2023-11-26', 'Commercial', 60000, 'PV002', 'O_004', 'TIN004');
+
+select * from install;
+
+CREATE TABLE purchase (
+    home_office_no VARCHAR(50),
+    pv_module VARCHAR(10),
+    PRIMARY KEY (home_office_no, pv_module),
+    FOREIGN KEY (home_office_no) REFERENCES user(home_office_no),
+    FOREIGN KEY (pv_module) REFERENCES Panel(pv_module)
+);
+INSERT INTO purchase (home_office_no, pv_module) VALUES
+('H_001', 'PV001'),
+('O_001', 'PV002'),
+('H_002', 'PV001'),
+('O_002', 'PV002'),
+('H_003', 'PV001'),
+('H_004', 'PV002'),
+('O_003', 'PV001'),
+('O_004', 'PV002'),
+('O_005', 'PV001');
+select * from purchase;
+
+CREATE TABLE distribution(
+    tin_no VARCHAR(10),
+    pv_module VARCHAR(10),
+    PRIMARY KEY (tin_no, pv_module),
+    FOREIGN KEY (tin_no) REFERENCES Vendor(TIN_number),
+    FOREIGN KEY (pv_module) REFERENCES Panel(pv_module)
+);
+
+INSERT INTO distribution (tin_no, pv_module) VALUES
+('TIN001', 'PV001'),
+('TIN001', 'PV002'),
+('TIN002', 'PV001'),
+('TIN002', 'PV002'),
+('TIN003', 'PV001'),
+('TIN003', 'PV002'),
+('TIN004', 'PV001'),
+('TIN004', 'PV002'),
+('TIN005', 'PV001'),
+('TIN005', 'PV002'),
+('TIN006', 'PV001'),
+('TIN006', 'PV002'),
+('TIN007', 'PV001'),
+('TIN007', 'PV002'),
+('TIN008', 'PV001'),
+('TIN008', 'PV002');
+
+select * from distribution;
