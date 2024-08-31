@@ -141,9 +141,9 @@ producer: 'Bharath'}
 1. List musician name, title of the song which he has played, the album in which song
 has occurred.
 db.musician.aggregate([
-// Unwind the sid array to have one document per song a musician has played
+
 { $unwind: "$sid" },
-// Lookup to join with the songs collection
+
 { $lookup: {
 from: "songs",
 localField: "sid",
@@ -151,9 +151,9 @@ foreignField: "sid",
 as: "songDetails"
 }
 },
-// Unwind the songDetails array to have one document per song
+
 { $unwind: "$songDetails" },
-// Lookup to join with the album collection
+
 { $lookup: {
 from: "album",
 localField: "sid",
@@ -161,9 +161,9 @@ foreignField: "sid",
 as: "albumDetails"
 }
 },
-// Unwind the albumDetails array to have one document per album
+
 { $unwind: "$albumDetails" },
-// Group by musician name, song title, and album title
+
 { $group: {
 _id: {
 musicianName: "$name",
@@ -282,20 +282,20 @@ OUTPUT:
 [ { name: 'Kiran' }, { name: 'Linda' }, { name: 'David' } ]
 3. List the details of songs which are performed by more than 3 musicians.
 db.musician.aggregate([
-// Unwind the sid array to have one document per song a musician has performed
+
 { $unwind: "$sid" },
-// Group by song ID and count the number of musicians for each song
+
 { $group: {
 _id: "$sid",
 musicianCount: { $sum: 1 }
 }
 },
-// Match songs that are performed by more than 3 musicians
+
 { $match: {
 musicianCount: { $gt: 3 }
 }
 },
-// Lookup to get the song details from the songs collection
+
 { $lookup: {
 from: "songs",
 localField: "_id",
@@ -304,9 +304,9 @@ as: "songDetails"
 
 }
 },
-// Unwind the songDetails array to get a flat structure
+
 { $unwind: "$songDetails" },
-// Project the desired fields from the songDetails
+
 { $project: {
 _id: 0,
 sid: "$songDetails.sid",
