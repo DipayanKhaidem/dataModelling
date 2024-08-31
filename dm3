@@ -172,7 +172,7 @@ albumTitle: "$albumDetails.title"
 }
 }
 },
-// Project the fields to include in the final output
+
 { $project: {
 _id: 0,
 musicianName: "$_id.musicianName",
